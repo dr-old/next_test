@@ -48,7 +48,7 @@ const Home = () => {
   return (
     <div
       className={"dark:bg-gray-900 dark:text-white bg-slate-100 text-gray-800"}>
-      <Header />
+      <Header title="Product List" back={false} />
       <div className="container mx-auto py-10">
         {/* Filter and Sort */}
         <div className="flex items-center justify-between mb-6">

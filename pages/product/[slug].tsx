@@ -2,6 +2,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { Product } from "@/utils/types";
+import Header from "@/components/Header"; // Update the path as needed
 
 const ProductDetail: React.FC = () => {
   const router = useRouter();
@@ -31,8 +32,9 @@ const ProductDetail: React.FC = () => {
   if (!product) return <p>Product not found</p>;
 
   return (
-    <div className="py-10">
-      <div className="container mx-auto p-6 rounded-3xl bg-slate-100 text-gray-800 dark:bg-gray-900 dark:text-white">
+    <div className="min-h-screen bg-slate-100 dark:bg-gray-900 text-gray-800 dark:text-white">
+      <Header title="Details" back={true} />
+      <div className="container mx-auto p-6 rounded-3xl">
         <div className="flex flex-col items-center">
           <Image
             src={product.thumbnail}
