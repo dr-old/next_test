@@ -35,11 +35,11 @@ const DarkModeToggle: React.FC = () => {
   return (
     <button
       onClick={toggleTheme}
-      className="p-2 rounded-lg focus:outline-none hover:bg-gray-700">
+      className="p-2 rounded-lg focus:outline-none hover:bg-indigo-700">
       {theme === "dark" ? (
-        <SunIcon className="h-6 w-6 text-yellow-500" aria-hidden="true" />
+        <SunIcon className="h-6 w-6 text-yellow-400" aria-hidden="true" />
       ) : (
-        <MoonIcon className="h-6 w-6 text-gray-400" aria-hidden="true" />
+        <MoonIcon className="h-6 w-6 text-white" aria-hidden="true" />
       )}
     </button>
   );

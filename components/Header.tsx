@@ -7,7 +7,7 @@ const Header = ({ title, back }: { title: string; back: boolean }) => {
 
   return (
     <header
-      className={` p-4 dark:bg-gray-800 dark:text-white bg-gray-800 text-white`}>
+      className={`p-4 dark:bg-indigo-800 rounded-t-2xl dark:text-white bg-indigo-800 text-white`}>
       <div className="container mx-auto flex items-center justify-between">
         {back ? (
           <button
