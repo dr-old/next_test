@@ -1,115 +1,108 @@
-import Image from "next/image";
-import localFont from "next/font/local";
+"use client";
+import { useEffect, useState } from "react";
+import ProductCard from "../components/ProductCard";
+import ActivityIndicator from "../components/Loading";
+import Header from "../components/Header";
+import { Product } from "@/utils/types";
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
-});
+async function fetchProducts(
+  skip: number,
+  limit: number = 10
+): Promise<Product[]> {
+  const res = await fetch(
+    `https://dummyjson.com/products?limit=${limit}&skip=${skip}&select=title,price,description,category,thumbnail`
+  );
+  const data = await res.json();
+  return data.products;
+}
 
-export default function Home() {
+const Home = () => {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [selectedCategory, setSelectedCategory] = useState<string>("All");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
+  const [loading, setLoading] = useState<boolean>(true);
+  const productsPerPage = 10;
+
+  useEffect(() => {
+    const fetchAndSetProducts = async () => {
+      setLoading(true);
+      const skip = (currentPage - 1) * productsPerPage;
+      const fetchedProducts = await fetchProducts(skip, productsPerPage);
+      setProducts(fetchedProducts);
+      setLoading(false);
+    };
+
+    fetchAndSetProducts();
+  }, [currentPage]);
+
+  const filteredProducts = products
+    .filter(
+      (product) =>
+        selectedCategory === "All" || product.category === selectedCategory
+    )
+    .sort((a, b) =>
+      sortOrder === "asc" ? a.price - b.price : b.price - a.price
+    );
+
   return (
     <div
-      className={`${geistSans.variable} ${geistMono.variable} grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]`}
-    >
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              pages/index.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+      className={"dark:bg-gray-900 dark:text-white bg-slate-100 text-gray-800"}>
+      <Header />
+      <div className="container mx-auto py-10">
+        {/* Filter and Sort */}
+        <div className="flex items-center justify-between mb-6">
+          <select
+            className="border border-gray-200 p-2 rounded-lg dark:bg-gray-800 dark:border-gray-800"
+            value={selectedCategory}
+            onChange={(e) => setSelectedCategory(e.target.value)}>
+            <option value="All">All Categories</option>
+            <option value="smartphones">Smartphones</option>
+            <option value="laptops">Laptops</option>
+          </select>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+          <select
+            className="border border-gray-200 p-2 rounded-lg dark:bg-gray-800 dark:border-gray-800"
+            value={sortOrder}
+            onChange={(e) => setSortOrder(e.target.value as "asc" | "desc")}>
+            <option value="asc">Price: Low to High</option>
+            <option value="desc">Price: High to Low</option>
+          </select>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+
+        {/* Product Grid or Loading Indicator */}
+        {loading ? (
+          <ActivityIndicator />
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredProducts.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+        )}
+
+        {/* Pagination Controls */}
+        <div className="flex justify-between mt-6">
+          <button
+            className="bg-gray-200 text-gray-800 py-2 px-4 rounded-lg disabled:opacity-50"
+            onClick={() =>
+              setCurrentPage((prevPage) => Math.max(prevPage - 1, 1))
+            }
+            disabled={currentPage === 1}>
+            Previous
+          </button>
+
+          <span className="text-gray-600">Page {currentPage}</span>
+
+          <button
+            className="bg-gray-200 text-gray-800 py-2 px-4 rounded-lg"
+            onClick={() => setCurrentPage((prevPage) => prevPage + 1)}>
+            Next
+          </button>
+        </div>
+      </div>
     </div>
   );
-}
+};
+
+export default Home;
