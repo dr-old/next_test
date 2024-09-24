@@ -91,12 +91,7 @@ const Home = () => {
         <meta name="description" content={"EcommerceSite"} />
       </Head>
 
-      <Header
-        title="Product List"
-        back={false}
-        searchQuery={searchQuery}
-        setSearchQuery={setSearchQuery}
-      />
+      <Header title="Product List" back={false} />
       {/* Search Input */}
       <div className="flex flex-col py-10 px-6">
         <input

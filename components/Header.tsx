@@ -1,19 +1,9 @@
-import { useState } from "react";
 import { useRouter } from "next/router";
 import DarkModeToggle from "./DarkModeToggle";
 import { ChevronLeftIcon } from "@heroicons/react/24/outline";
 
-const Header = ({
-  title,
-  back,
-}: {
-  title: string;
-  back: boolean;
-  searchQuery?: string;
-  setSearchQuery?: (params?: any) => void;
-}) => {
+const Header = ({ title, back }: { title: string; back: boolean }) => {
   const router = useRouter();
-  const [showSearch, setShowSearch] = useState(false);
 
   return (
     <header className="p-4 dark:bg-indigo-800 rounded-t-2xl dark:text-white bg-indigo-800 text-white">
