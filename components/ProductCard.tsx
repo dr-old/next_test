@@ -1,12 +1,12 @@
 "use client";
 
 import Image from "next/image";
-import { Product } from "@/utils/types";
+import { ProductProps } from "@/utils/types";
 import { useRouter } from "next/navigation";
 import { createSeoUrl } from "@/utils/helpers";
 
 interface ProductCardProps {
-  product: Product;
+  product: ProductProps;
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {

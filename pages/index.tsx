@@ -38,7 +38,6 @@ const Home = () => {
     const skip = (currentPage - 1) * productsPerPage;
     const fetchedProducts = await fetchProducts(skip, productsPerPage);
 
-    // Check if more products exist
     if (fetchedProducts.length < productsPerPage) {
       setHasMore(false);
     }
