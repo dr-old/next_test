@@ -1,4 +1,4 @@
-export interface Product {
+export interface ProductProps {
   id: number;
   title: string;
   description: string;
@@ -9,7 +9,7 @@ export interface Product {
   stock: number;
 }
 
-export interface ProductDetail {
+export interface ProductDetailProps {
   title: string;
   description: string;
   category: string;

@@ -1,22 +1,26 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { ProductDetail } from "@/utils/types";
+import { ProductDetailProps } from "@/utils/types";
 import Header from "@/components/Header";
 import ActivityIndicator from "@/components/Loading";
+import Head from "next/head";
+import { seoTitle } from "@/utils/helpers";
 
 const ProductDetail: React.FC = () => {
   const router = useRouter();
   const { slug } = router.query;
-  const [product, setProduct] = useState<ProductDetail | null>(null);
+  const [product, setProduct] = useState<ProductDetailProps | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   useEffect(() => {
     if (slug) {
+      const id = slug.toString().split("-");
+
       const fetchProduct = async () => {
         try {
-          const res = await fetch(`https://dummyjson.com/products/${slug}`);
+          const res = await fetch(`https://dummyjson.com/products/${id[0]}`);
           const data = await res.json();
           setProduct(data);
         } catch (error) {
@@ -32,6 +36,15 @@ const ProductDetail: React.FC = () => {
 
   return (
     <div className="container my-10 mx-auto rounded-3xl bg-slate-100 text-gray-800 dark:bg-gray-900 dark:text-white">
+      {product?.title && product?.category && product?.description && (
+        <Head>
+          <title>
+            {seoTitle(product!.title, product!.category, "EcommerceSite")}
+          </title>
+          <meta name="description" content={product!.description} />
+        </Head>
+      )}
+
       <Header title="Details" back={true} />
       {loading ? (
         <div className="py-10 px-6">

@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { Product } from "@/utils/types";
 import { useRouter } from "next/navigation";
+import { createSeoUrl } from "@/utils/helpers";
 
 interface ProductCardProps {
   product: Product;
@@ -10,9 +11,10 @@ interface ProductCardProps {
 
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const router = useRouter();
+  const seoUrl = createSeoUrl(product.title);
 
   const handleClick = () => {
-    router.push(`/product/${product.id}`);
+    router.push(`/product/${product.id}-${seoUrl}`);
   };
 
   return (
